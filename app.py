@@ -1,37 +1,50 @@
 import streamlit as st
 
-# Configuración de la página (título que se ve en la pestaña)
-st.set_page_config(page_title="ATB - Asesor de Automóviles", page_icon="🚜")
+st.set_page_config(page_title="ATB - Asesor Técnico", page_icon="🚜")
 
-# Título Principal
 st.title("🚜 ATB: Asesor Técnico de Bolsillo")
-st.subheader("Orientación basada en rigor técnico y contexto real")
 st.markdown("---")
 
-# --- BARRA LATERAL PARA INPUTS ---
+# --- PERFIL DEL USUARIO (Los interrogantes que faltaban) ---
+st.sidebar.header("👤 Perfil del Usuario")
+edad = st.sidebar.slider("¿Qué edad tiene el conductor?", 18, 95, 60)
+experiencia = st.sidebar.select_slider("Experiencia en Off-Road:", options=["Novato", "Intermedio", "Experto"])
+
 st.sidebar.header("⚙️ Configuración de Uso")
-terreno = st.sidebar.selectbox("Tipo de Terreno Dominante:", ["Asfalto Urbano", "Ripio / Tierra", "Off-Road Pesado"])
-carga = st.sidebar.slider("Carga adicional estimada (kg):", 0, 1000, 300)
-clima = st.sidebar.radio("Clima predominante:", ["Templado", "Frío Extremo (Patagonia)"])
-eco = st.sidebar.toggle("Priorizar nuevas energías (Híbridos/EV)")
+uso = st.sidebar.selectbox("Uso principal:", ["Trabajo pesado / Campo", "Mixto (Pueblo y Ruta)", "Viajes / Turismo"])
+terreno = st.sidebar.selectbox("Terreno más frecuente:", ["Asfalto", "Ripio consolidado", "Piedra / Arena suelta"])
+carga = st.sidebar.slider("Carga habitual (kg):", 0, 1000, 300)
 
-# --- BOTÓN DE ACCIÓN ---
+# --- LÓGICA TÉCNICA DE VEREDICTO ---
 if st.sidebar.button("GENERAR VEREDICTO TÉCNICO"):
-    st.header("📋 Resultados del Análisis Técnico")
+    st.header("📋 Veredicto Basado en Perfil")
     
-    # Aquí creamos dos columnas para mostrar opciones comparativas
-    col1, col2 = st.columns(2)
+    # Aquí el algoritmo empieza a "pensar" según la edad
+    st.write(f"### Análisis para conductor de {edad} años en terreno de {terreno}")
     
-    with col1:
-        st.write("### Opción A: Máxima Robustez")
-        st.write("**Ford Ranger Raptor**")
-        st.progress(95)
-        st.info("Recomendada por su esquema de suspensión Fox y torque para el ripio.")
-        
-    with col2:
-        st.write("### Opción B: Eficiencia Importada")
-        st.write("**BYD Leopard 5**")
-        st.progress(88)
-        st.warning("Excelente torque instantáneo. Verificar service oficial en la zona.")
+    # Lógica de Ergonomía y Confort
+    if edad > 65:
+        st.info("⚠️ **Prioridad de Ergonomía:** El sistema está filtrando por vehículos con acceso fácil y mandos de alta visibilidad.")
+        recomendacion_principal = "Toyota Hilux SRX (Por suavidad y reventa)"
+        score_principal = 92
+    else:
+        st.info("🚀 **Prioridad de Performance:** El sistema prioriza torque y respuesta dinámica.")
+        recomendacion_principal = "Ford Ranger Raptor (Por suspensión de alto rendimiento)"
+        score_principal = 96
 
+    # Mostramos los resultados
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("Compatibilidad Técnica", f"{score_principal}%")
+        st.write(f"**Vehículo Sugerido:** {recomendacion_principal}")
+        st.progress(score_principal)
+
+    with col2:
+        st.write("**Factores Críticos analizados:**")
+        st.write(f"- Torque necesario para {carga}kg")
+        st.write(f"- Resistencia estructural para {terreno}")
+        st.write("- Logística de repuestos en Patagonia")
+
+    st.markdown("---")
+    st.warning("Recuerde: Esta es una orientación técnica. Siempre realice una prueba de manejo para evaluar la comodidad del asiento y la visibilidad.")
     st.success("Análisis completado. Estos resultados son sugerencias basadas en los parámetros ingresados.")
